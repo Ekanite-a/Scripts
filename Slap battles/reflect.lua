@@ -60,7 +60,7 @@ local Stage1 = MainTab:CreateButton({
         part.Size = Vector3.new(50, 1, 50)
         part.CFrame = CFrame.new(-125, -30, 60)
         hrp.CFrame = CFrame.new(-125, -25, 60)
-        while workspace:WaitForChild("Rig"):FindFirstChild("Humanoid").Health > 0  do
+        while task.wait(0.1) do
             for i, v in ipairs(workspace.BossArena.Arena.mirrors:GetDescendants()) do
                 if v.ClassName == "MeshPart" and v.Position.Y >= -28 and v.Transparency == 0 then
                     hrp.CFrame = v.CFrame
@@ -69,9 +69,6 @@ local Stage1 = MainTab:CreateButton({
                     break
                 end
             end
-            
-            task.wait(0.1)
         end
     end
 })
-
