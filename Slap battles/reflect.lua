@@ -46,7 +46,8 @@ local Stage1 = MainTab:CreateButton({
 local Stage2 = MainTab:CreateButton({
     Name = "Stage 2",
     Callback = function()
-        hrp.CFrame = CFrame.new(450, 305, 100)
+        part.CFrame = CFrame.new(300, 115, 1000)
+        hrp.CFrame = CFrame.new(300, 120, 1000)
 
         repeat task.wait(1) until workspace.Stage2.Mirror.Touch.Transparency == 0
 
@@ -58,15 +59,15 @@ local Stage1 = MainTab:CreateButton({
     Name = "Stage 3",
     Callback = function()
         part.Size = Vector3.new(50, 1, 50)
-        part.CFrame = CFrame.new(-125, -40, 60)
-        hrp.CFrame = CFrame.new(-125, -35, 60)
+        part.CFrame = CFrame.new(1300, -40, -60)
+        hrp.CFrame = CFrame.new(1300, -35, -60)
         while task.wait(0.1) do
-            if hrp.Position.Y < -40 then hrp.CFrame = CFrame.new(-125, -25, 60) end
+            if hrp.Position.Y < -40 then hrp.CFrame = CFrame.new(1300, -35, -60) end
             for i, v in ipairs(workspace.BossArena.Arena.mirrors:GetDescendants()) do
                 if v.ClassName == "MeshPart" and v.Position.Y >= -28 and v.Transparency == 0 then
                     hrp.CFrame = v.CFrame
                     repeat task.wait(0.1) until v.Position.Y < -28
-                    hrp.CFrame = CFrame.new(-125, -25, 60)
+                    hrp.CFrame = CFrame.new(1300, -35, -60)
                     break
                 end
             end
