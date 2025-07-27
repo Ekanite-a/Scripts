@@ -58,9 +58,10 @@ local Stage1 = MainTab:CreateButton({
     Name = "Stage 3",
     Callback = function()
         part.Size = Vector3.new(50, 1, 50)
-        part.CFrame = CFrame.new(-125, -30, 60)
-        hrp.CFrame = CFrame.new(-125, -25, 60)
+        part.CFrame = CFrame.new(-125, -40, 60)
+        hrp.CFrame = CFrame.new(-125, -35, 60)
         while task.wait(0.1) do
+            if hrp.Position.Y < -40 then hrp.CFrame = CFrame.new(-125, -25, 60) end
             for i, v in ipairs(workspace.BossArena.Arena.mirrors:GetDescendants()) do
                 if v.ClassName == "MeshPart" and v.Position.Y >= -28 and v.Transparency == 0 then
                     hrp.CFrame = v.CFrame
