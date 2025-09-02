@@ -30,7 +30,7 @@ for i = 1, N do
 end
 local Parts = minesweeper:WaitForChild("CELLS"):GetChildren()
 table.sort(Parts, function(a, b)
-    return tonumber(string.gsub(a, "Part", "")) < tonumber(string.gsub(b, "Part", ""))
+    return tonumber(string.gsub(a.Name, "Part", "")) < tonumber(string.gsub(b.Name, "Part", ""))
 end)
 
 local id = 1
