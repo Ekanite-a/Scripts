@@ -58,10 +58,10 @@ end)
 
 local flag = newcclosure(function(y, x)
     if grid[y][x].state ~= -1 then return end
-    
-    minesweeper.aaa:FireServer()
+
+    minesweeper.FlagModeChange:FireServer()
     fcd(grid[y][x].obj.ClickDetector)
-    minesweeper.aaa:FireServer()
+    minesweeper.FlagModeChange:FireServer()
     grid[y][x].state = -2
 end)
 
@@ -157,6 +157,7 @@ local SA = newcclosure(function()
     local T = 1;
     for i = 1, N do
         for j = 1, N do
+            if grid[i][j].obj.Color == Color3.new(255, 0, 0) then finish = true end
             if grid[i][j].state == -1 then
                 table.insert(state, {y = i, x = j, mine = false})
                 table.insert(data, {y = i, x = j, mineP = 0})
@@ -165,8 +166,11 @@ local SA = newcclosure(function()
     end
     if #state == 0 then
         finish = true
+    end
+    if finish then
         return
     end
+
     local CurE = calEnergy(state)
     local NewE; local deltaE
     
