@@ -25,7 +25,7 @@ copy = newcclosure(function(orig, copies) -- omg why i have to do this myself
 end)
 
 local N = tonumber(string.sub(minesweeper:WaitForChild("INTERFACE"):WaitForChild("BoardSize"):WaitForChild("SurfaceGui"):WaitForChild("Number").Text, 1, 2))
-local grid = {}
+local grid, flagged_pos = {}, {}
 for i = 1, N do
     grid[i] = {}
 end
@@ -40,7 +40,7 @@ local updateGrid = newcclosure(function()
     for i = 1, N do
         for j = 1, N do
             grid[i][j] = {
-                state = (Parts[id].Color == Color3.fromRGB(255, 255, 255) and (Parts[id]:FindFirstChild("NumberGUI") and tonumber(Parts[id].NumberGUI.TextLabel.Text) or 0)) or (Parts[id]:FindFirstChild("NumberGUI") and -2 or -1),
+                state = (Parts[id].Color == Color3.fromRGB(255, 255, 255) and (Parts[id]:FindFirstChild("NumberGUI") and tonumber(Parts[id].NumberGUI.TextLabel.Text) or 0)) or ((Parts[id]:FindFirstChild("NumberGUI") or table.find(flagged_pos, {x = i, y = j})) and -2 or -1),
                 obj = Parts[id]
             }
             id = id + 1
@@ -49,27 +49,29 @@ local updateGrid = newcclosure(function()
 end)
 
 
-local open = newcclosure(function(y, x)
-    if grid[y][x].state ~= -1 then return end
+local open = newcclosure(function(x, y)
+    if grid[x][y].state ~= -1 then return end
 
-    fcd(grid[y][x].obj.ClickDetector)
+    fcd(grid[x][y].obj.ClickDetector)
 end)
 
 
-local flag = newcclosure(function(y, x)
-    if grid[y][x].state ~= -1 then return end
+local flag = newcclosure(function(x ,y)
+    if grid[x][y].state ~= -1 then return end
 
-    minesweeper.FlagModeChange:InvokeServer()
-    task.wait(0.1)
-    fcd(grid[y][x].obj.ClickDetector)
-    task.wait(0.1)
-    minesweeper.FlagModeChange:InvokeServer()
+    table.insert(flagged_pos, {x, y})
+    --[[minesweeper.FlagModeChange:InvokeServer()
+    task.wait(2)
+    fcd(grid[x][y].obj.ClickDetector)
+    task.wait(2)
+    minesweeper.FlagModeChange:InvokeServer()]]
+    grid[x][y].state = -2; grid[x][y].obj.Color = Color3.fromRGB(0, 0, 0)
 end)
 
 
-local dy = {-1, 0, 1, -1, 1, -1, 0, 1}; local dx = {-1, 0, 1, -1, 1, -1, 0, 1}
+local dx = {-1, -1, -1, 0, 0, 1, 1, 1}; local dy = {-1, 0, 1, -1, 1, -1, 0, 1}
 local greedy = newcclosure(function()
-    local upd = false;
+    local upd = false
     local flagged; local blank
 
     for i = 1, N do
@@ -77,11 +79,11 @@ local greedy = newcclosure(function()
             if grid[i][j].state >= 1 then
                 flagged, blank = 0, {}
                 for k = 1, 8 do
-                    if grid[i + dy[k]] and grid[i + dy[k]][j + dx[k]] then
-                        if grid[i + dy[k]][j + dx[k]].state == -2 then
+                    if grid[i + dx[k]] and grid[i + dx[k]][j + dy[k]] then
+                        if grid[i + dx[k]][j + dy[k]].state == -2 then
                             flagged = flagged + 1
-                        elseif grid[i + dy[k]][j + dx[k]].state == -1 then
-                            table.insert(blank, {i + dy[k], j + dx[k]})
+                        elseif grid[i + dx[k]][j + dy[k]].state == -1 then
+                            table.insert(blank, {i + dx[k], j + dy[k]})
                         end
                     end
                 end
@@ -114,29 +116,29 @@ local calEnergy = newcclosure(function(state)
     tmpGrid = copy(grid)
     for _, v in ipairs(state) do
         if v.mine then
-            tmpGrid[v.y][v.x].state = -3
+            tmpGrid[v.x][v.y].state = -3
             totalPredicted = totalPredicted + 1
         end
     end
 
     for _, u in ipairs(state) do
         for i = 1, 8 do
-            local ny, nx = u.y + dy[i], u.x + dx[i]
+            local nx, ny = u.x + dx[i], u.y + dy[i]
             if tmpGrid[ny] and tmpGrid[ny][nx] and tmpGrid[ny][nx].state >= 1 then
                 predicted, flagged = 0, 0
                 
                 for j = 1, 8 do
-                    local nny, nnx = ny + dy[j], nx + dx[j]
-                    if tmpGrid[nny] and tmpGrid[nny][nnx] then
-                        if tmpGrid[nny][nnx].state == -2 then
+                    local nnx, nny = nx + dx[j], ny + dy[j]
+                    if tmpGrid[nnx] and tmpGrid[nnx][nny] then
+                        if tmpGrid[nnx][nny].state == -2 then
                             flagged = flagged + 1
-                        elseif tmpGrid[nny][nnx].state == -3 then
+                        elseif tmpGrid[nnx][nny].state == -3 then
                             predicted = predicted + 1
                         end
                     end
                 end
 
-                E = E + (predicted - (tmpGrid[ny][nx].state - flagged))^2
+                E = E + (predicted - (tmpGrid[nx][ny].state - flagged))^2
             end
         end
     end
@@ -159,12 +161,18 @@ local state = {}; local data = {}; local finish = false
 local thin = 5; local burn_in = 500
 local SA = newcclosure(function()
     local T = 1;
+    updateGrid()
     for i = 1, N do
         for j = 1, N do
             if grid[i][j].obj.Color == Color3.fromRGB(255, 0, 0) then finish = true end
             if grid[i][j].state == -1 then
-                table.insert(state, {y = i, x = j, mine = false})
-                table.insert(data, {y = i, x = j, mineP = 0})
+                for k = 1, 8 do
+                    if grid[i + dx[k]] and grid[i + dx[k]][j + dy[k]] and grid[i + dx[k]][j + dy[k]].state >= 1 then
+                        table.insert(state, {x = i, y = j, mine = false})
+                        table.insert(data, {x = i, y = j, mineP = 0})
+                        break
+                    end
+                end
             end
         end
     end
@@ -207,9 +215,9 @@ local SA = newcclosure(function()
     local samples = (1000 + 10 * #state) / thin
     for _, v in ipairs(data) do
         if v.mineP / samples < 0.05 then
-            open(v.y, v.x)
+            open(v.x, v.y)
         elseif v.mineP / samples > 0.95 then
-            flag(v.y, v.x)
+            flag(v.x, v.y)
         end
     end
     updateGrid()
@@ -241,3 +249,4 @@ end)
 
 
 start() -- Let's goooo
+print("finish")
