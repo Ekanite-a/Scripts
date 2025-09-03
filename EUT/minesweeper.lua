@@ -1,5 +1,5 @@
--- using greedy and simulated annealing
--- not finished yet
+-- using greedy and simulated annealing + tabu search
+-- not finished yet, still have some bugs
 local workspace = game:GetService("Workspace")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local minesweeper = workspace:WaitForChild("objects"):WaitForChild("minesweeper")
@@ -70,7 +70,7 @@ end)
 local dy = {-1, 0, 1, -1, 1, -1, 0, 1}; local dx = {-1, 0, 1, -1, 1, -1, 0, 1}
 local greedy = newcclosure(function()
     local upd = false;
-    local flagged; local blank = {}
+    local flagged; local blank
 
     for i = 1, N do
         for j = 1, N do
@@ -97,8 +97,8 @@ local greedy = newcclosure(function()
                         flag(v[1], v[2])
                     end
                 end
+                table.clear(blank)
             end
-            table.clear(blank)
         end
     end
     updateGrid()
@@ -150,7 +150,7 @@ local flip = newcclosure(function(state)
         randomId = math.random(1, #state)
     until not table.find(tabu, randomId)
     table.insert(tabu, randomId)
-    if #tabu >= #state / 10 then table.remove(tabu, 1) end
+    if #tabu >= #state // 10 then table.remove(tabu, 1) end
 
     state[randomId].mine = not state[randomId].mine
 end)
@@ -229,6 +229,7 @@ local start = newcclosure(function()
         end
         if first then break end
     end
+    updateGrid()
 
     while task.wait(0.1) and not finish do
         if not greedy() then
