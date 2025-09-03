@@ -1,12 +1,13 @@
 -- using greedy and simulated annealing + tabu search
 -- not finished yet, still have some bugs
 local workspace = game:GetService("Workspace")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = game:GetService("Players").LocalPlayer
 local minesweeper = workspace:WaitForChild("objects"):WaitForChild("minesweeper")
 
 
 local fcd = fireclickdetector
 
+math.randomseed(tick() + player.UserId)
 local copy 
 copy = newcclosure(function(orig, copies) -- omg why i have to do this myself
     copies = copies or {}
@@ -28,6 +29,7 @@ local N = tonumber(string.sub(minesweeper:WaitForChild("INTERFACE"):WaitForChild
 local grid, flagged_pos = {}, {}
 for i = 1, N do
     grid[i] = {}
+    flagged_pos[i] = {}
 end
 local Parts = minesweeper:WaitForChild("CELLS"):GetChildren()
 table.sort(Parts, function(a, b)
@@ -36,16 +38,19 @@ end)
 
 local id
 local updateGrid = newcclosure(function()
+    task.wait(0.2)
     id = 1
     for i = 1, N do
         for j = 1, N do
             grid[i][j] = {
-                state = (Parts[id].Color == Color3.fromRGB(255, 255, 255) and (Parts[id]:FindFirstChild("NumberGUI") and tonumber(Parts[id].NumberGUI.TextLabel.Text) or 0)) or ((Parts[id]:FindFirstChild("NumberGUI") or table.find(flagged_pos, {x = i, y = j})) and -2 or -1),
+                state = (Parts[id].Color == Color3.fromRGB(255, 255, 255) and (Parts[id]:FindFirstChild("NumberGUI") and tonumber(Parts[id].NumberGUI:WaitForChild("TextLabel", 2).Text) or 0)) or ((Parts[id]:FindFirstChild("NumberGUI") or (flagged_pos[i][j] == 1)) and -2 or -1),
                 obj = Parts[id]
             }
+            flagged_pos[i][j] = 0
             id = id + 1
         end
     end
+    task.wait(0.2)
 end)
 
 
@@ -59,12 +64,7 @@ end)
 local flag = newcclosure(function(x ,y)
     if grid[x][y].state ~= -1 then return end
 
-    table.insert(flagged_pos, {x, y})
-    --[[minesweeper.FlagModeChange:InvokeServer()
-    task.wait(2)
-    fcd(grid[x][y].obj.ClickDetector)
-    task.wait(2)
-    minesweeper.FlagModeChange:InvokeServer()]]
+    flagged_pos[x][y] = 1
     grid[x][y].state = -2; grid[x][y].obj.Color = Color3.fromRGB(0, 0, 0)
 end)
 
@@ -80,10 +80,10 @@ local greedy = newcclosure(function()
                 flagged, blank = 0, {}
                 for k = 1, 8 do
                     if grid[i + dx[k]] and grid[i + dx[k]][j + dy[k]] then
-                        if grid[i + dx[k]][j + dy[k]].state == -2 then
+                        if grid[i + dx[k]][j + dy[k]].state == -2 or flagged_pos[i + dx[k]][j + dy[k]] == 1 then
                             flagged = flagged + 1
                         elseif grid[i + dx[k]][j + dy[k]].state == -1 then
-                            table.insert(blank, {i + dx[k], j + dy[k]})
+                            table.insert(blank, {x = i + dx[k], y = j + dy[k]})
                         end
                     end
                 end
@@ -91,12 +91,12 @@ local greedy = newcclosure(function()
                 if grid[i][j].state - flagged == 0 and #blank > 0 then
                     upd = true
                     for _, v in ipairs(blank) do
-                        open(v[1], v[2])
+                        open(v.x, v.y)
                     end
                 elseif grid[i][j].state - flagged == #blank and #blank > 0 then
                     upd = true
                     for _, v in ipairs(blank) do
-                        flag(v[1], v[2])
+                        flag(v.x, v.y)
                     end
                 end
                 table.clear(blank)
@@ -130,7 +130,7 @@ local calEnergy = newcclosure(function(state)
                 for j = 1, 8 do
                     local nnx, nny = nx + dx[j], ny + dy[j]
                     if tmpGrid[nnx] and tmpGrid[nnx][nny] then
-                        if tmpGrid[nnx][nny].state == -2 then
+                        if tmpGrid[nnx][nny].state == -2 or flagged_pos[nnx][nny] == 1 then
                             flagged = flagged + 1
                         elseif tmpGrid[nnx][nny].state == -3 then
                             predicted = predicted + 1
@@ -161,15 +161,16 @@ local state = {}; local data = {}; local finish = false
 local thin = 5; local burn_in = 500
 local SA = newcclosure(function()
     local T = 1;
+    table.clear(tabu)
     updateGrid()
     for i = 1, N do
         for j = 1, N do
             if grid[i][j].obj.Color == Color3.fromRGB(255, 0, 0) then finish = true end
-            if grid[i][j].state == -1 then
+            if grid[i][j].state == -1 and flagged_pos then
                 for k = 1, 8 do
                     if grid[i + dx[k]] and grid[i + dx[k]][j + dy[k]] and grid[i + dx[k]][j + dy[k]].state >= 1 then
                         table.insert(state, {x = i, y = j, mine = false})
-                        table.insert(data, {x = i, y = j, mineP = 0})
+                        table.insert(data, {x = i, y = j, times = 0})
                         break
                     end
                 end
@@ -203,7 +204,7 @@ local SA = newcclosure(function()
             if deltaE < 0 or math.random() < math.exp(-deltaE / T) then
                 CurE = NewE
                 for j = 1, #state do
-                    data[j].mineP = data[j].mineP + ((state[j].mine and 1) or 0)
+                    data[j].times = data[j].times + ((state[j].mine and 1) or 0)
                 end
             end
         end
@@ -214,13 +215,29 @@ local SA = newcclosure(function()
 
     local samples = (1000 + 10 * #state) / thin
     for _, v in ipairs(data) do
-        if v.mineP / samples < 0.05 then
+        if v.times / samples < 0.05 then
             open(v.x, v.y)
-        elseif v.mineP / samples > 0.95 then
+        elseif v.times / samples > 0.95 then
             flag(v.x, v.y)
         end
     end
+    
+    minesweeper.FlagModeChange:InvokeServer()
+    task.wait(0.5)
+    for i = 1, N do
+        for j = 1, N do
+            if flagged_pos[i][j] == 1 then
+                fcd(grid[v.x][v.y].obj.ClickDetector)
+                flagged_pos[i][j] = 0
+            end
+        end
+    end
+    task.wait(2)
+    minesweeper.FlagModeChange:InvokeServer()
+    task.wait(3)
+
     updateGrid()
+    print("sa end")
 end)
 
 
@@ -239,8 +256,9 @@ local start = newcclosure(function()
     end
     updateGrid()
 
-    while task.wait(0.1) and not finish do
+    while task.wait(0.2) and not finish do
         if not greedy() then
+            print("start sa")
             SA()
         end
     end
@@ -248,5 +266,5 @@ end)
 
 
 
-start() -- Let's goooo
+start()
 print("finish")
