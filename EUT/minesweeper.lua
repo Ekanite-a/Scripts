@@ -120,19 +120,21 @@ local calEnergy = newcclosure(function(state)
             totalPredicted = totalPredicted + 1
         end
     end
+    if totalPredicted > totalMine then
+        return 1E7
+    end
 
     for _, u in ipairs(state) do
         for i = 1, 8 do
             local nx, ny = u.x + dx[i], u.y + dy[i]
-            if tmpGrid[ny] and tmpGrid[ny][nx] and tmpGrid[ny][nx].state >= 1 then
+            if tmpGrid[nx] and tmpGrid[nx][ny] and tmpGrid[nx][ny].state >= 1 then
                 predicted, flagged = 0, 0
                 
                 for j = 1, 8 do
-                    local nnx, nny = nx + dx[j], ny + dy[j]
-                    if tmpGrid[nnx] and tmpGrid[nnx][nny] then
-                        if tmpGrid[nnx][nny].state == -2 or flagged_pos[nnx][nny] == 1 then
+                    if tmpGrid[nx + dx[j]] and tmpGrid[nx + dx[j]][ny + dy[j]] then
+                        if tmpGrid[nx + dx[j]][ny + dy[j]].state == -2 or flagged_pos[nx + dx[j]][ny + dy[j]] == 1 then
                             flagged = flagged + 1
-                        elseif tmpGrid[nnx][nny].state == -3 then
+                        elseif tmpGrid[nx + dx[j]][ny + dy[j]].state == -3 then
                             predicted = predicted + 1
                         end
                     end
@@ -143,7 +145,7 @@ local calEnergy = newcclosure(function(state)
         end
     end
 
-    return E + 1E6 * math.max(0, totalPredicted - totalMine)
+    return E
 end)
 
 local randomId; local tabu = {}
@@ -166,7 +168,7 @@ local SA = newcclosure(function()
     for i = 1, N do
         for j = 1, N do
             if grid[i][j].obj.Color == Color3.fromRGB(255, 0, 0) then finish = true end
-            if grid[i][j].state == -1 and flagged_pos then
+            if grid[i][j].state == -1 then
                 for k = 1, 8 do
                     if grid[i + dx[k]] and grid[i + dx[k]][j + dy[k]] and grid[i + dx[k]][j + dy[k]].state >= 1 then
                         table.insert(state, {x = i, y = j, mine = false})
