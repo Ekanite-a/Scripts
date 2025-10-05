@@ -23,8 +23,7 @@ task.spawn(function()
     local args
     while task.wait() do
         for _, v in ipairs(npcs) do
-            args = {"slap", {["Instance"] = v:FindFirstChild("Head")}
-            }
+            args = {"slap", {["Instance"] = v:FindFirstChild("Head")}}
             ReplicatedStorage.Remotes.tool.hit:FireServer(unpack(args))
         end
     end
