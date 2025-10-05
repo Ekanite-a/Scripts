@@ -1,8 +1,7 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 task.wait(0.5)
 
-local workspace = game:GetService("Workspace")
-local room = workspace:WaitForChild("Debug Room")
+local room = game:GetService("Workspace"):WaitForChild("Debug Room")
 local fcd = function(instance) 
     fireclickdetector(instance:FindFirstChild("ClickDetector"))
     task.wait(0.1)
