@@ -17,17 +17,17 @@ end
 
 for i = 1, 5 do
     hrp.CFrame = workspace.Shed.StartDoor["Cylinder.025"].CFrame
-    task.wait(0.5)
+    task.wait(1)
     fpp(workspace.Shed.StartDoor["Cylinder.025"].Attachment.ProximityPrompt)
 
     if i == 5 then break end
 
     hrp.CFrame = wait("Maze/transition/visual/Shed/Door/Cylinder.025").CFrame
-    task.wait(0.5)
+    task.wait(1)
     fpp(workspace.Maze.transition.visual.Shed.Door["Cylinder.025"].EndPromptAttachment.EndPrompt)
 
     repeat task.wait(0.1) until (hrp.Position - workspace.Shed.StartDoor["Cylinder.025"].Position).Magnitude <= 50
-    task.wait(1)
+    task.wait(2)
 end
 
 hrp.CFrame = wait("Maze/BarnMaze/CoreParts/ChaseOutroStart").CFrame
