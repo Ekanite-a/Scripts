@@ -8,7 +8,7 @@ local hrp = game:GetService("Players").LocalPlayer.Character:WaitForChild("Human
 
 local wait = function(path)
     val = workspace
-    for v in string.gmatch(path, "([^/]+)") do
+    for v in string.gmatch(path, "[^/]+") do
         val = val:WaitForChild(v)
     end
 
