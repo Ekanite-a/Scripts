@@ -23,7 +23,7 @@ local Portal = MainTab:CreateButton({
     Name = "go to portal",
     Callback = function()
         stage = workspace:FindFirstChild("Stage1") or workspace:FindFirstChild("Stage2") or workspace:FindFirstChild("Stage3")
-        hrp.CFrame = stage.Lobby.Portals.normal.Teleport1.CFrame
+        hrp.CFrame = (stage.Lobby.Portals:FindFirstChild("normal") and stage.Lobby.Portals.normal.Teleport1.CFrame) or stage.Lobby.Portals.default.Teleport2
     end
 })
 
