@@ -47,6 +47,7 @@ local Stage123 = MainTab:CreateButton({
         else
             part.CFrame = CFrame.new(1300, -40, -60)
             hrp.CFrame = CFrame.new(1300, -35, -60)
+            
             while task.wait(0.1) do
                 hrp.CFrame = (hrp.CFrame.Y < -40 and CFrame.new(1300, -35, -60)) or hrp.CFrame
                 for _, v in ipairs(workspace.BossArena.Arena.mirrors:GetDescendants()) do
