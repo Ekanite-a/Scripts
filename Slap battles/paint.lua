@@ -14,12 +14,11 @@ end
 
 local target
 RunService.Heartbeat:Connect(function()
-    args = {"slap"}
-    ReplicatedStorage.Remotes.tool.use:FireServer(unpack(args))
+    ReplicatedStorage.Remotes.tool.use:FireServer("slap")
     for _, v in ipairs(npcs) do
         args = {"slap", {["Instance"] = v:FindFirstChild("Head")}}
         ReplicatedStorage.Remotes.tool.hit:FireServer(unpack(args))
-        
+
         if not target and v.Head.Transparency == 0 and not v.HumanoidRootPart.Anchored then
             target = v
         end
@@ -29,6 +28,6 @@ RunService.Heartbeat:Connect(function()
         firetouchinterest(char:FindFirstChild("Hand", true), target.HumanoidRootPart, 1)
         char.HumanoidRootPart.CFrame = target.HumanoidRootPart.CFrame
 
-        if target.Head.Transparency == 1 then target = nil end
+        target = (target.Head.Transparency == 0 and target) or nil
     end
 end)
