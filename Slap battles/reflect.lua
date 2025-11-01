@@ -31,20 +31,7 @@ local Stage123 = MainTab:CreateButton({
     Name = "Stage 1 2 3",
     Callback = function()
         stage = workspace:FindFirstChild("Stage1") or workspace:FindFirstChild("Stage2") or workspace:FindFirstChild("Stage3")
-        if stage.Name == "Stage1" then
-            hrp.CFrame = CFrame.new(450, 305, 100)
-
-            repeat task.wait(1) until workspace.Stage1.Mirror.Touch.Transparency == 0
-
-            hrp.CFrame = workspace.Stage1.Mirror.Touch.CFrame
-        elseif stage.Name == "Stage2" then
-            part.CFrame = CFrame.new(300, 115, 1000)
-            hrp.CFrame = CFrame.new(300, 120, 1000)
-
-            repeat task.wait(1) until workspace.Stage2.Mirror.Touch.Transparency == 0
-
-            hrp.CFrame = workspace.Stage2.Mirror.Touch.CFrame
-        else
+        if not stage then
             part.CFrame = CFrame.new(1300, -40, -60)
             hrp.CFrame = CFrame.new(1300, -35, -60)
             
@@ -59,6 +46,19 @@ local Stage123 = MainTab:CreateButton({
                     end
                 end
             end
+        elseif stage.Name == "Stage1" then
+            hrp.CFrame = CFrame.new(450, 305, 100)
+
+            repeat task.wait(1) until workspace.Stage1.Mirror.Touch.Transparency == 0
+
+            hrp.CFrame = workspace.Stage1.Mirror.Touch.CFrame
+        elseif stage.Name == "Stage2" then
+            part.CFrame = CFrame.new(300, 115, 1000)
+            hrp.CFrame = CFrame.new(300, 120, 1000)
+
+            repeat task.wait(1) until workspace.Stage2.Mirror.Touch.Transparency == 0
+
+            hrp.CFrame = workspace.Stage2.Mirror.Touch.CFrame
         end
     end
 })
