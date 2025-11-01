@@ -37,7 +37,7 @@ local Stage123 = MainTab:CreateButton({
             repeat task.wait(1) until workspace.Stage1.Mirror.Touch.Transparency == 0
 
             hrp.CFrame = workspace.Stage1.Mirror.Touch.CFrame
-        else if stage.Name == "Stage2" then
+        elseif stage.Name == "Stage2" then
             part.CFrame = CFrame.new(300, 115, 1000)
             hrp.CFrame = CFrame.new(300, 120, 1000)
 
