@@ -36,7 +36,7 @@ local Stage123 = MainTab:CreateButton({
             hrp.CFrame = CFrame.new(1300, -35, -60)
             
             while task.wait(0.1) do
-                if hrp.CFrame.Y < -40 then hrp.CFrame = CFrame.new(1300, -35, -60)
+                if hrp.CFrame.Y < -40 then hrp.CFrame = CFrame.new(1300, -35, -60) end
                 for _, v in ipairs(workspace.BossArena.Arena.mirrors:GetDescendants()) do
                     if v.ClassName == "MeshPart" and v.Position.Y >= -28 and v.Transparency == 0 then
                         hrp.CFrame = v.CFrame
