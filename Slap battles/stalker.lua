@@ -13,7 +13,7 @@ end
 game["Run Service"].Heartbeat:Connect(function()
     if player.leaderstats.Glove.Value == "Stalker" and player.Character and player.Character:FindFirstChild("Humanoid") then
         player.Character:SetAttribute("GhostInvisible", false)
-        player.Character.Humanoid.WalkSpeed = math.max(player.Character.Humanoid.WalkSpeed, 20.1)
+        player.Character.Humanoid.WalkSpeed = (player.Character.Humanoid.WalkSpeed <= 20 and 20.1) or player.Character.Humanoid.WalkSpeed
         for i, v in next, players:GetPlayers() do
             if v ~= player and v.Character then
                 local meter = v.Character:FindFirstChild("StalkMeter") or Instance.new("IntValue", v.Character)
