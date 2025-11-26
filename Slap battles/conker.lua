@@ -54,7 +54,7 @@ task.wait(7.5)
 
 while task.wait() do
     hrp.CFrame = CFrame.new(36, 4, 1.5)
-        
+
     if workspace:FindFirstChild("Conker") then
         firetouchinterest(hrp, workspace.Conker, 0)
         firetouchinterest(hrp, workspace.Conker, 1)
@@ -63,7 +63,6 @@ while task.wait() do
     ReplicatedStorage.Remotes.tool.use:FireServer("slap")
     for i, v in ipairs(workspace.NPCs:GetChildren()) do
         if v:FindFirstChild("HumanoidRootPart") then
-            firetouchinterest()
             ReplicatedStorage.Remotes.tool.hit:FireServer(
                 "slap",
                 {["Instance"] = v.HumanoidRootPart}
