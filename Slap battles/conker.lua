@@ -13,8 +13,6 @@ else
     task.wait(1)
     fireclickdetector(workspace.Map.Props.BasketCollection.Basket.ClickDetector)
     task.wait(7.5)
-    firetouchinterest(hrp, workspace.StartRoundPart, 0)
-    firetouchinterest(hrp, workspace.StartRoundPart, 1)
 
     while task.wait() do
         hrp.CFrame = CFrame.new(36, 4, 1.5)
@@ -53,8 +51,6 @@ ReplicatedStorage.Remotes.Dialogue.FinishedNPCDialogue:FireServer()
 task.wait(1)
 fireclickdetector(workspace.Map.Props.BasketCollection.Basket.ClickDetector)
 task.wait(7.5)
-firetouchinterest(hrp, workspace.StartRoundPart, 0)
-firetouchinterest(hrp, workspace.StartRoundPart, 1)
 
 while task.wait() do
     hrp.CFrame = CFrame.new(36, 4, 1.5)
