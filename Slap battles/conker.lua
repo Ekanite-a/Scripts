@@ -25,7 +25,7 @@ else
         end
 
         if workspace.NPCs:FindFirstChild("squirrel") and workspace.NPCs.squirrel:FindFirstChild("HumanoidRootPart") then
-            ReplicatedStorage.Remotes.tool.use:FireServer()
+            ReplicatedStorage.Remotes.tool.use:FireServer("slap")
             ReplicatedStorage.Remotes.tool.hit:FireServer({
                 "slap",
                 {["Instance"] = workspace.NPCs.squirrel.HumanoidRootPart}
@@ -62,7 +62,7 @@ while task.wait() do
     end
 
     if workspace.NPCs:FindFirstChild("squirrel") and workspace.NPCs.squirrel:FindFirstChild("HumanoidRootPart") then
-        ReplicatedStorage.Remotes.tool.use:FireServer()
+        ReplicatedStorage.Remotes.tool.use:FireServer("slap")
         ReplicatedStorage.Remotes.tool.hit:FireServer({
             "slap",
             {["Instance"] = workspace.NPCs.squirrel.HumanoidRootPart}
