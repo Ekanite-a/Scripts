@@ -24,13 +24,16 @@ else
             firetouchinterest(hrp, workspace.Conker, 1)
         end
 
-        if workspace.NPCs:FindFirstChild("squirrel") and workspace.NPCs.squirrel:FindFirstChild("HumanoidRootPart") then
-            ReplicatedStorage.Remotes.tool.use:FireServer("slap")
-            ReplicatedStorage.Remotes.tool.hit:FireServer({
-                "slap",
-                {["Instance"] = workspace.NPCs.squirrel.HumanoidRootPart}
-            })
+        ReplicatedStorage.Remotes.tool.use:FireServer("slap")
+        for i, v in ipairs(workspace.NPCs:GetChildren()) do
+            if v.FindFirstChild("HumanoidRootPart") then
+                ReplicatedStorage.Remotes.tool.hit:FireServer({
+                    "slap",
+                    {["Instance"] = v.HumanoidRootPart}
+                })
+            end
         end
+        
         fireproximityprompt(workspace.Map.CoreAssets.Bowl.ProximityPrompt)
     end
 end
@@ -61,13 +64,16 @@ while task.wait() do
         firetouchinterest(hrp, workspace.Conker, 1)
     end
 
-    if workspace.NPCs:FindFirstChild("squirrel") and workspace.NPCs.squirrel:FindFirstChild("HumanoidRootPart") then
-        ReplicatedStorage.Remotes.tool.use:FireServer("slap")
-        ReplicatedStorage.Remotes.tool.hit:FireServer({
-            "slap",
-            {["Instance"] = workspace.NPCs.squirrel.HumanoidRootPart}
-        })
+    ReplicatedStorage.Remotes.tool.use:FireServer("slap")
+    for i, v in ipairs(workspace.NPCs:GetChildren()) do
+        if v.FindFirstChild("HumanoidRootPart") then
+            ReplicatedStorage.Remotes.tool.hit:FireServer({
+                "slap",
+                {["Instance"] = v.HumanoidRootPart}
+            })
+        end
     end
+    
     fireproximityprompt(workspace.Map.CoreAssets.Bowl.ProximityPrompt)
 end
 ]])
