@@ -27,10 +27,10 @@ else
         ReplicatedStorage.Remotes.tool.use:FireServer("slap")
         for i, v in ipairs(workspace.NPCs:GetChildren()) do
             if v:FindFirstChild("HumanoidRootPart") then
-                ReplicatedStorage.Remotes.tool.hit:FireServer({
+                ReplicatedStorage.Remotes.tool.hit:FireServer(
                     "slap",
-                    {["Instance"] = v.HumanoidRootPart}
-                })
+                    {Instance = v.HumanoidRootPart}
+                )
             end
         end
         
@@ -67,10 +67,11 @@ while task.wait() do
     ReplicatedStorage.Remotes.tool.use:FireServer("slap")
     for i, v in ipairs(workspace.NPCs:GetChildren()) do
         if v:FindFirstChild("HumanoidRootPart") then
-            ReplicatedStorage.Remotes.tool.hit:FireServer({
+            firetouchinterest()
+            ReplicatedStorage.Remotes.tool.hit:FireServer(
                 "slap",
                 {["Instance"] = v.HumanoidRootPart}
-            })
+            )
         end
     end
     
