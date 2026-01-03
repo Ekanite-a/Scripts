@@ -14,8 +14,8 @@ local BadGloves, days = "/bob/Bubble/Lamp/L.O.L.B.O.M.B/OVERKILL/Plague/Sbeve/UF
 local work = function()
     cleaning = false
 
-    local WholeSalerGui = player.PlayerGui:WaitForChild("WholesaleOrdering").Canvas.Listings.ScrollingFrame
-    task.wait(2)
+    local WholeSalerGui = player.PlayerGui:WaitForChild("WholesaleOrdering"):WaitForChild("Canvas"):WaitForChild("Listings"):WaitForChild("ScrollingFrame")
+    task.wait(3)
     local list = {}
     for i, v in next, WholeSalerGui:GetChildren() do
         if v.Name:match("listing") then
@@ -134,3 +134,9 @@ for i = 1, 5 do
 
     if days:match("5") then main:Disconnect() end
 end
+
+
+hrp.CFrame = CFrame.new(-51, 5, -33)
+task.wait(1)
+fireproximityprompt(workspace["Merchant_" .. player.Name].Head.EscapePrompt)
+-- congrat
