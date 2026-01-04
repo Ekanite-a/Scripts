@@ -36,7 +36,7 @@ label.TextWrapped = true
 label.TextSize = 13
 label.Font = Enum.Font.Gotham
 label.TextColor3 = Color3.fromRGB(230, 230, 230)
-label.Text = ""
+label.Text = "Anti afk is enabled!"
 
 local dragging = false
 local dragOffset
