@@ -121,9 +121,7 @@ local work = function()
     for _, v in next, workspace.GloveShipment:GetChildren() do
         if v.Name:match("StockBox") then
             rs.Remotes.PickupBox:FireServer(v)
-            task.wait(0.2)
-            hrp.CFrame = workspace.Shelves[tostring(shelf)].Base.CFrame
-            task.wait(0.2)
+            task.wait()
             rs.Remotes.StockShelf:FireServer(workspace.Shelves[tostring(shelf)])
             shelf += 1
         end
@@ -176,7 +174,7 @@ local main; main = runs.Heartbeat:Connect(function()
                 cleaning = false
                 local name = v.Name:lower()
                 rs.Remotes.PickupCheckoutItem:FireServer(v)
-                task.wait(0.1)
+                task.wait()
                 rs.Remotes.ScanCheckoutItem:FireServer(name)
                 task.wait()
                 cleaning = true
