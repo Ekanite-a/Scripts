@@ -84,7 +84,8 @@ local work = function()
     cleaning = false
 
     local WholeSalerGui = player.PlayerGui:WaitForChild("WholesaleOrdering"):WaitForChild("Canvas"):WaitForChild("Listings"):WaitForChild("ScrollingFrame")
-    task.wait(3)
+    WholeSalerGui:WaitForChild("listing_1")
+    task.wait(0.5)
     local list = {}
     for i, v in next, WholeSalerGui:GetChildren() do
         if v.Name:match("listing") then
