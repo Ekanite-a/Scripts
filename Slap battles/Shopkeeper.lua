@@ -11,7 +11,7 @@ local pack = player:WaitForChild("Backpack")
 local hrp = player.Character:WaitForChild("HumanoidRootPart")
 local hum = player.Character:WaitForChild("Humanoid")
 local playerGui = player.PlayerGui
-local text = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ekanite-a/Scripts/refs/heads/main/General/text.lua"))()
+local text = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ekanite-a/Modules/refs/heads/main/General/text.lua"))()
 playerGui.News.Canvas.Topbar.ExitButton.Interactable = false
 
 local t = text.create(150, 50, "Anti afk is enabled!")
