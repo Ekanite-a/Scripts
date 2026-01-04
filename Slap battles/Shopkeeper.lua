@@ -146,7 +146,7 @@ if workspace.Tools and workspace.Tools.Prompts then
     task.wait(0.5)
     fireproximityprompt(prompt.Mop.ProximityPrompt)
 end
-task.wait(3)
+task.wait(0.5)
 
 local trashes = workspace.Trash.Instances
 local main; main = runs.Heartbeat:Connect(function()
@@ -178,7 +178,7 @@ local main; main = runs.Heartbeat:Connect(function()
                 rs.Remotes.PickupCheckoutItem:FireServer(v)
                 task.wait(0.1)
                 rs.Remotes.ScanCheckoutItem:FireServer(name)
-                task.wait(0.2)
+                task.wait()
                 cleaning = true
 
                 break
@@ -186,7 +186,7 @@ local main; main = runs.Heartbeat:Connect(function()
         end
 
         hum:UnequipTools()
-        hrp.CFrame = CFrame.new(Vector3.new(53, 5.7, -42), Vector3.new(0, 0, 1))
+        hrp.CFrame = CFrame.new(53, 5.7, -42)
     end
 end)
 
@@ -220,12 +220,8 @@ fireproximityprompt(workspace["Merchant_" .. player.Name].Head.EscapePrompt)
 
 
 if game.PlaceId == 122901288403496 then
-
-loadstring(s)()
-
+    loadstring(s)()
 else
-
-game:GetService("TeleportService"):Teleport(122901288403496)
-queue_on_teleport(s)
-
+    game:GetService("TeleportService"):Teleport(122901288403496)
+    queue_on_teleport(s)
 end
