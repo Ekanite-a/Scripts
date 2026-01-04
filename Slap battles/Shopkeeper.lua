@@ -45,11 +45,14 @@ local work = function()
         return a[2] > b[2]
     end)
 
-    local cash = tonumber(playerGui.Displays.topBarHolder.cash.Text:sub(2))
+    local cash, items = tonumber(playerGui.Displays.topBarHolder.cash.Text:sub(2)), 0
     for _, v in next, list do
+        if items == 10 then break end
+
         if cash - v[3] >= 0 then
             firesignal(v[1].Activated)
             cash -= v[3]
+            items += 1
         end
     end
 
