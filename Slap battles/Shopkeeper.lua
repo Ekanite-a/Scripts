@@ -11,65 +11,10 @@ local pack = player:WaitForChild("Backpack")
 local hrp = player.Character:WaitForChild("HumanoidRootPart")
 local hum = player.Character:WaitForChild("Humanoid")
 local playerGui = player.PlayerGui
-local UIS = game:GetService("UserInputService")
+local text = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ekanite-a/Scripts/refs/heads/main/General/text.lua"))()
 playerGui.News.Canvas.Topbar.ExitButton.Interactable = false
 
-
-local gui = Instance.new("ScreenGui", playerGui)
-gui.DisplayOrder = 999999
-gui.IgnoreGuiInset = true
-
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.fromOffset(150, 50)
-frame.Position = UDim2.fromScale(0.7, 0.1)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-frame.BackgroundTransparency = 0.2
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Parent = gui
-
-local label = Instance.new("TextLabel", frame)
-label.Size = UDim2.fromScale(1, 1)
-label.Position = UDim2.fromScale(0, 0)
-label.BackgroundTransparency = 1
-label.TextWrapped = true
-label.TextSize = 13
-label.Font = Enum.Font.Gotham
-label.TextColor3 = Color3.fromRGB(230, 230, 230)
-label.Text = "Anti afk is enabled!"
-
-local dragging = false
-local dragOffset
-
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = frame.Position
-    end
-end)
-
-UIS.InputEnded:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-        dragging = false
-    end
-end)
-
-UIS.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
-    end
-end)
-
-updText = function(text)
-    label.Text = tostring(text)
-end
+local t = text.create(150, 50, "Anti afk is enabled!")
 
 player.Idled:Connect(function()
     game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
@@ -152,7 +97,7 @@ local main; main = runs.Heartbeat:Connect(function()
     for _, v in next, workspace.Shelves:GetDescendants() do
         if v.Name == "Handle" then cnt += 1 end
     end
-    updText(cnt .. " gloves left")
+    t:updText(cnt .. " gloves left")
 
     if not cleaning then return end
 
@@ -211,6 +156,7 @@ for i = 1, 5 do
 end
 
 task.wait(1)
+t:updText("Congrat!")
 hrp.CFrame = CFrame.new(-51, 5, -33)
 task.wait(1)
 fireproximityprompt(workspace["Merchant_" .. player.Name].Head.EscapePrompt)
