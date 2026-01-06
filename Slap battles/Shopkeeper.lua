@@ -14,7 +14,11 @@ local playerGui = player.PlayerGui
 local text = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ekanite-a/Modules/refs/heads/main/General/text.lua"))()
 playerGui.News.Canvas.Topbar.ExitButton.Interactable = false
 
-local t = text.create(150, 50, "Anti afk is enabled!")
+local t = text.create({
+    x = 150,
+    y = 50,
+    str = "Anti afk is enabled!"
+})
 
 player.Idled:Connect(function()
     game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
@@ -100,7 +104,7 @@ local main; main = runs.Heartbeat:Connect(function()
     for _, v in next, workspace.Shelves:GetDescendants() do
         if v.Name == "Handle" then cnt += 1 end
     end
-    t:updText(cnt .. " gloves left")
+    t.updText(cnt .. " gloves left")
 
     if not cleaning then return end
 
@@ -159,7 +163,7 @@ for i = 1, 5 do
 end
 
 task.wait(1)
-t:updText("Congrat!")
+t.updText("Congrat!")
 hrp.CFrame = CFrame.new(-51, 5, -33)
 task.wait(1)
 fireproximityprompt(workspace["Merchant_" .. player.Name].Head.EscapePrompt)
