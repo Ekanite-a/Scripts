@@ -87,13 +87,13 @@ if workspace.Tools and workspace.Tools.Prompts then
 
     hrp.CFrame = prompt.Broom.CFrame
 
-    task.wait(0.5)
+    task.wait(0.75)
     fireproximityprompt(prompt.Broom.ProximityPrompt)
 
     task.wait(0.5)
     hrp.CFrame = prompt.Mop.CFrame
 
-    task.wait(0.5)
+    task.wait(0.75)
     fireproximityprompt(prompt.Mop.ProximityPrompt)
 end
 task.wait(0.5)
