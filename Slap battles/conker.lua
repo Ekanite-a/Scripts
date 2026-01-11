@@ -39,7 +39,7 @@ task.wait(0.5)
 
 
 local qtp = queue_on_teleport or queueonteleport
-if game.PlaceId °= 101113181694564 then
+if game.PlaceId ~= 101113181694564 then
     loadstring(s)()
 else
     qtp(s)
