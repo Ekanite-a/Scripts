@@ -45,12 +45,6 @@ createButton("Smart Aleck quest", function()
     end
 end)
 
-createButton("Claim", function()
-    local chest = game:GetService("Workspace").Chest.Bottom.MetalBottom
-
-    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = chest.CFrame
-    fireproximityprompt(chest.Attachment.ProximityPrompt)
-end)
 
 local ids = {
     86643839793301,
