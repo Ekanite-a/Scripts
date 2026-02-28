@@ -45,7 +45,7 @@ createButton("Smart Aleck quest", function()
 end)
 
 createButton("Claim", function()
-    local chest = game:GetService("workspace").Chest.Bottom.MetalBottom
+    local chest = game:GetService("Workspace").Chest.Bottom.MetalBottom
 
     game:GetService("Players").LocalPlayer.Character.HumanoidRootPart = chest.CFrame
     fireproximityprompt(chest.Attachment.ProximityPrompt)
