@@ -4,7 +4,7 @@ local createButton = loadstring(game:HttpGet("https://pastefy.app/2uZzncgf/raw")
 createButton("Speedy Sam quest", function()
     local workspace = game:GetService("Workspace")
     local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-    for i, v in next, workspace.Fih:GetChildren() do
+    for i, v in workspace.Fih:GetChildren() do
         if v:FindFirstChild("Fish") then
             firetouchinterest(hrp, v.Fish, 0)
             firetouchinterest(hrp, v.Fish, 1)
@@ -14,7 +14,7 @@ createButton("Speedy Sam quest", function()
     firetouchinterest(hrp, workspace.FinishPart, 0)
 end)
 
-createButton("Smaet Aleck quest", function()
+createButton("Smart Aleck quest", function()
     local workspace = game:GetService("Workspace")
     local lp = game:GetService("Players").LocalPlayer
     local char = lp.Character
@@ -26,7 +26,7 @@ createButton("Smaet Aleck quest", function()
     end
 
     local acc = {}
-    for i, v in next, workspace.Snowman.Models.DisplaySnowman.Accessories:GetDescendants () do
+    for i, v in workspace.Snowman.Models.DisplaySnowman.Accessories:GetDescendants () do
         if v.Name == "Handle" and v.Transparency == 0 then
             table.insert(acc, workspace.Accessories:FindFirstChild(v.Parent.Name). ProximityPrompt)
         end
