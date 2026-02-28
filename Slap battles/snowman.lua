@@ -47,7 +47,7 @@ end)
 createButton("Claim", function()
     local chest = game:GetService("Workspace").Chest.Bottom.MetalBottom
 
-    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart = chest.CFrame
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = chest.CFrame
     fireproximityprompt(chest.Attachment.ProximityPrompt)
 end)
 
