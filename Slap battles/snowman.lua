@@ -56,5 +56,5 @@ local ids = {
 
 qtp = queue_on_teleport or queueonteleport
 if table.find(ids, game.PlaceId) then
-    qtp("loadstring(game:HttpGet(""))()")
+    qtp([[loadstring(game:HttpGet("https://raw.githubusercontent.com/Ekanite-a/Scripts/refs/heads/main/Slap%20battles/snowman.lua"))()]])
 end
