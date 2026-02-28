@@ -11,6 +11,7 @@ createButton("Speedy Sam quest", function()
         end
     end
 
+    task.wait(0.5)
     firetouchinterest(hrp, workspace.FinishPart, 0)
 end)
 
